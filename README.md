@@ -76,7 +76,7 @@ cross_device_identity_resolution/
 ├── tests/
 │   ├── test_identity.py         # Unit tests: data gen, features, hashing, pairing
 │   └── test_nlp.py              # Unit tests: text cleaning, segmentation
-├── pipeline.py                  # 🚀 Main pipeline entry point
+├── pipeline.py                  # Main pipeline entry point
 ├── requirements.txt
 └── config/config.yaml
 ```
@@ -130,7 +130,7 @@ pytest tests/ -v -k "not nlp"
 
 ## Pipeline Architecture
 
-### Phase 1 — Data Generation
+### Phase 1 - Data Generation
 
 `src/data/generator.py` generates **150K synthetic session records** for 30K unique users:
 
@@ -139,7 +139,7 @@ pytest tests/ -v -k "not nlp"
 - Sessions carry **content interaction logs** (page titles across 15 ad-tech categories)
 - **Privacy-preserving**: IPs are coarsened to /16, all PII is SHA-256 hashed
 
-### Phase 2 — Identity Resolution (87% Accuracy)
+### Phase 2 - Identity Resolution (87% Accuracy)
 
 The key insight: two sessions from the same user share **correlated behavioural signals** even across different devices and networks.
 
@@ -167,14 +167,14 @@ Achieved metrics (test set):
   ROC-AUC   : 0.93+
 ```
 
-### Phase 3 — Contextual Targeting (NLP)
+### Phase 3 - Contextual Targeting (NLP)
 
 `src/nlp/text_processor.py` processes session interaction logs:
 
 1. **SpaCy** (`en_core_web_sm`): tokenisation, noun-chunk extraction, named entity recognition → structured keywords
 2. **HuggingFace** (`all-MiniLM-L6-v2`): 384-dimensional dense sentence embeddings, L2-normalised
 
-### Phase 4 — Audience Segmentation (K-Means)
+### Phase 4 - Audience Segmentation (K-Means)
 
 `src/segmentation/clustering.py` clusters sessions into audience cohorts:
 
@@ -187,7 +187,7 @@ Example segments discovered:
 - *Travel & Food Explorers* — 60% mobile, high scroll depth
 - *Finance & Real Estate* — even device split, long session duration
 
-### Phase 5 — Storage & Experiment Tracking
+### Phase 5 - Storage & Experiment Tracking
 
 - **SQLite** (default) / **MySQL**: sessions, enriched sessions, audience segments
 - **MLflow**: parameters, metrics, and plots logged per experiment run
@@ -235,10 +235,10 @@ Two tracked experiments:
 
 The Dash dashboard (`python dashboard/app.py`) provides four views:
 
-1. **Session Overview** — device distribution pie, hourly activity, cross-device users
-2. **Audience Segments** — segment size bars, behavioural radar, full segment table
-3. **Behaviour Analysis** — scroll depth boxplots, duration histograms, engagement scatter
-4. **Data Table** — filterable, sortable session-level data
+1. **Session Overview** - device distribution pie, hourly activity, cross-device users
+2. **Audience Segments** - segment size bars, behavioural radar, full segment table
+3. **Behaviour Analysis** - scroll depth boxplots, duration histograms, engagement scatter
+4. **Data Table** - filterable, sortable session-level data
 
 ## Analytical SQL
 
@@ -261,7 +261,7 @@ pytest tests/ -v --cov=src               # with coverage report
 ## Author
 
 **Aswin Gunasekaran**  
-MSc AI & Marketing Strategy — EPITA & EM Normandie  
+MSc AI & Marketing Strategy - EPITA & EM Normandie  
 [LinkedIn](https://www.linkedin.com/in/aswinguna/) · [GitHub](https://github.com/Aswinguna)
 
 ---
