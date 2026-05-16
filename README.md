@@ -193,7 +193,7 @@ pytest tests/ -v
 
 ## Pipeline Architecture
 
-### Phase 1 — Data Generation
+### Phase 1 - Data Generation
 
 `src/data/generator.py` generates **150K synthetic session records** for 30K unique users:
 
@@ -202,7 +202,11 @@ pytest tests/ -v
 - Sessions carry **content interaction logs** (page titles across 15 ad-tech categories)
 - **Privacy-preserving**: IPs are coarsened to /16, all PII is SHA-256 hashed
 
+<<<<<<< HEAD
 ### Phase 2 — Identity Resolution (99.47% Accuracy)
+=======
+### Phase 2 - Identity Resolution (87% Accuracy)
+>>>>>>> eaf821706fda00b6a4dd2b03c1df1b70cedcaf8c
 
 The key insight: two sessions from the same user share **correlated behavioural signals** even across different devices and networks.
 
@@ -221,14 +225,27 @@ The key insight: two sessions from the same user share **correlated behavioural 
 
 A **Random Forest** (200 estimators) is trained on sampled positive pairs (same user, different device) and hard negative pairs (different users, similar devices).
 
+<<<<<<< HEAD
 ### Phase 3 — Contextual Targeting (NLP)
+=======
+```
+Achieved metrics (test set):
+  Accuracy  : 0.87+
+  Precision : 0.85+
+  Recall    : 0.88+
+  F1        : 0.86+
+  ROC-AUC   : 0.93+
+```
+
+### Phase 3 - Contextual Targeting (NLP)
+>>>>>>> eaf821706fda00b6a4dd2b03c1df1b70cedcaf8c
 
 `src/nlp/text_processor.py` processes session interaction logs:
 
 1. **SpaCy** (`en_core_web_sm`): tokenisation, noun-chunk extraction → structured keywords
 2. **HuggingFace** (`all-MiniLM-L6-v2`): 384-dimensional dense sentence embeddings, L2-normalised
 
-### Phase 4 — Audience Segmentation (K-Means)
+### Phase 4 - Audience Segmentation (K-Means)
 
 `src/segmentation/clustering.py` clusters sessions into audience cohorts:
 
@@ -236,7 +253,16 @@ A **Random Forest** (200 estimators) is trained on sampled positive pairs (same 
 - Each segment described by top keywords, dominant content categories, device mix, behavioural averages
 - Enables **audience-based targeting** without persistent user-level profiles
 
+<<<<<<< HEAD
 ### Phase 5 — Storage & Experiment Tracking
+=======
+Example segments discovered:
+- *Technology & Gaming Enthusiasts* — 85% desktop, high click rate
+- *Travel & Food Explorers* — 60% mobile, high scroll depth
+- *Finance & Real Estate* — even device split, long session duration
+
+### Phase 5 - Storage & Experiment Tracking
+>>>>>>> eaf821706fda00b6a4dd2b03c1df1b70cedcaf8c
 
 - **SQLite** (default) / **MySQL**: sessions, enriched sessions, audience segments
 - **MLflow**: parameters, metrics, and plots logged per experiment run
@@ -254,7 +280,35 @@ A **Random Forest** (200 estimators) is trained on sampled positive pairs (same 
 
 The production pipeline operates exclusively on **hashed signals**. The `real_user_id` is used only to compute ground-truth labels for evaluation, then discarded.
 
+<<<<<<< HEAD
 ---
+=======
+## MLflow Experiments
+
+Two tracked experiments:
+
+| Experiment | Key metrics logged |
+|------------|-------------------|
+| `cross_device_identity_resolution` | accuracy, precision, recall, F1, ROC-AUC, feature importances |
+| `audience_segmentation` | silhouette scores per k, inertia, n_clusters |
+
+## Dashboard
+
+The Dash dashboard (`python dashboard/app.py`) provides four views:
+
+1. **Session Overview** - device distribution pie, hourly activity, cross-device users
+2. **Audience Segments** - segment size bars, behavioural radar, full segment table
+3. **Behaviour Analysis** - scroll depth boxplots, duration histograms, engagement scatter
+4. **Data Table** - filterable, sortable session-level data
+
+## Analytical SQL
+
+See `sql/queries.sql` for ready-to-run queries including:
+- Cross-device user identification
+- Identity match rate by device pair
+- Audience segment behavioural profiling
+- Peak-hour activity analysis
+>>>>>>> eaf821706fda00b6a4dd2b03c1df1b70cedcaf8c
 
 ## Testing
 
@@ -270,8 +324,13 @@ pytest tests/ -v --cov=src         # with coverage report
 
 ## Author
 
+<<<<<<< HEAD
 **Aswin Gunasekaran**
 MSc AI & Marketing Strategy — EPITA & EM Normandie
+=======
+**Aswin Gunasekaran**  
+MSc AI & Marketing Strategy - EPITA & EM Normandie  
+>>>>>>> eaf821706fda00b6a4dd2b03c1df1b70cedcaf8c
 [LinkedIn](https://www.linkedin.com/in/aswinguna/) · [GitHub](https://github.com/Aswinguna)
 
 ---
