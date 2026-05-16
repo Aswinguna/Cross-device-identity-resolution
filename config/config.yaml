@@ -1,0 +1,74 @@
+# ============================================================
+# Cross-Device Identity Resolution — Configuration
+# ============================================================
+
+# ── Data Generation ─────────────────────────────────────────
+data:
+  n_users: 30000           # Generates ~150K sessions (avg 5 per user)
+  random_seed: 42
+  output_dir: data/processed
+  sample_dir: data/sample
+  sample_size: 5000        # Rows to keep in the lightweight sample CSV
+
+# ── Database ─────────────────────────────────────────────────
+database:
+  backend: sqlite          # "sqlite" (default) or "mysql"
+  sqlite_path: data/processed/sessions.db
+  # MySQL settings (only used when backend = mysql)
+  mysql:
+    host: localhost
+    port: 3306
+    user: root
+    password: ""
+    database: cross_device_id
+
+# ── Identity Resolution ──────────────────────────────────────
+identity:
+  model: random_forest     # "random_forest" | "xgboost" | "logistic_regression"
+  n_pairs_per_user: 3      # Positive pairs sampled per user
+  neg_pos_ratio: 1.5       # Ratio of negative to positive pairs
+  test_size: 0.20
+  threshold: 0.50          # Probability threshold for predicting "same user"
+  rf_params:
+    n_estimators: 200
+    max_depth: 12
+    min_samples_leaf: 5
+    class_weight: balanced
+    random_state: 42
+    n_jobs: -1
+  xgb_params:
+    n_estimators: 200
+    max_depth: 6
+    learning_rate: 0.05
+    use_label_encoder: false
+    eval_metric: logloss
+    random_state: 42
+
+# ── NLP & Embeddings ─────────────────────────────────────────
+nlp:
+  spacy_model: en_core_web_sm
+  embedding_model: sentence-transformers/all-MiniLM-L6-v2
+  batch_size: 64
+  max_text_length: 512
+
+# ── Audience Segmentation ────────────────────────────────────
+segmentation:
+  n_clusters: 10
+  kmeans_init: k-means++
+  kmeans_max_iter: 500
+  kmeans_random_state: 42
+  top_keywords_per_segment: 8
+  # KMeans is run for each k in this range and best chosen by silhouette
+  k_search_range: [6, 7, 8, 9, 10, 11, 12]
+
+# ── MLflow ───────────────────────────────────────────────────
+mlflow:
+  tracking_uri: outputs/mlflow
+  experiment_identity: "cross_device_identity_resolution"
+  experiment_segmentation: "audience_segmentation"
+
+# ── Dashboard ────────────────────────────────────────────────
+dashboard:
+  host: 127.0.0.1
+  port: 8050
+  debug: true
